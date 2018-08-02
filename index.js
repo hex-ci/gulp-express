@@ -14,6 +14,7 @@ var util = require('util'),
 module.exports = (function () {
     var server = undefined, // the server child process
         lr = undefined, // tiny-lr server
+        isReConnect = false,
         config = {
             args: ['app.js'],   // args for child_process.spawn
             options: {  // options for child_process.options
@@ -26,7 +27,7 @@ module.exports = (function () {
         info = chalk.gray,
         error = chalk.bold.red;
     config.options.env = process.env;
-    config.options.env.NODE_ENV = 'development';
+    config.options.env.server_ENV = 'development';
 
     var callback = {
         processExit: function (code, sig) {
@@ -38,9 +39,7 @@ module.exports = (function () {
             debug(info('server process exited with [code => %s | sig => %s]'), code, sig);
             if(sig !== 'SIGKILL'){
                 //server stopped unexpectedly
-                if (lr) {
-                    lr.close();
-                }
+                process.exit(0);
             }
         },
 
@@ -49,6 +48,10 @@ module.exports = (function () {
         },
 
         serverLog: function (data) {
+            if (isReConnect && typeof config.options.reconnect === 'function') {
+                config.options.reconnect.call(this, data);
+                isReConnect = false;
+            }            
             console.log(info(data.trim()));
         },
 
@@ -92,6 +95,7 @@ module.exports = (function () {
                 server.kill('SIGKILL');
                 //server.removeListener('exit', callback.serverExit);
                 server = undefined;
+                isReConnect = true;
             } else {
                 if(config.livereload){
                     lr = tinylr(config.livereload);
@@ -120,6 +124,7 @@ module.exports = (function () {
                 server.kill('SIGKILL');
                 //server.removeListener('exit', callback.serverExit);
                 server = undefined;
+                isReConnect = true;
             }
             if(lr){
                 debug(info('close livereload server'));
