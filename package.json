@@ -1,8 +1,8 @@
 {
-  "name": "gulp-express",
+  "name": "gulp-express-cb",
   "version": "0.3.6",
-  "description": "gulp livereload plugin",
-  "homepage": "https://github.com/gimm/gulp-express",
+  "description": "gulp livereload plugin for cb",
+  "homepage": "https://github.com/hex-ci/gulp-express",
   "main": "./index.js",
   "scripts": {
     "test": "mocha",
@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/gimm/gulp-express"
+    "url": "git://github.com/hex-ci/gulp-express"
   },
   "author": {
     "name": "yucc2008@gmail.com"
@@ -31,7 +31,7 @@
   },
   "readmeFilename": "README.md",
   "bugs": {
-    "url": "https://github.com/gimm/gulp-express/issues"
+    "url": "https://github.com/hex-ci/gulp-express/issues"
   },
   "devDependencies": {
     "mocha": "^2.0.1"
